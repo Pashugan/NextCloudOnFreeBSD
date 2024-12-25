@@ -220,7 +220,7 @@ chown www:www /var/log/nextcloud
 mariadb -u root -e "DELETE FROM mysql.user WHERE User='';"
 mariadb -u root -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
 mariadb -u root -e "DROP DATABASE IF EXISTS test;"
-mariadb -u root -e "DELETE FROM mysql.db WHERE Db='test' OR Db LIKE 'test\\_%';"
+mariadb -u root -e "DELETE FROM mysql.db WHERE Db IN ('test', 'test\\_%');"
 mariadb -u root -e "CREATE DATABASE ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
 mariadb -u root -e "CREATE USER '${DB_USERNAME}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}';"
 mariadb -u root -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USERNAME}'@'127.0.0.1';"
