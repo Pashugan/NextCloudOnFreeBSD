@@ -220,7 +220,7 @@ chown www:www /var/log/nextcloud
 mariadb -u root -e "DELETE FROM mysql.user WHERE User='';"
 mariadb -u root -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
 mariadb -u root -e "DROP DATABASE IF EXISTS test;"
-mariadb -u root -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+mariadb -u root -e "DELETE FROM mysql.db WHERE Db='test' OR Db LIKE 'test\\_%';"
 mariadb -u root -e "CREATE DATABASE ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
 mariadb -u root -e "CREATE USER '${DB_USERNAME}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}';"
 mariadb -u root -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USERNAME}'@'127.0.0.1';"
@@ -322,7 +322,7 @@ if [ "$ENCRYPT_DATA" = "true" ]; then
 	sudo -u www php "${WWW_DIR}/${HOST_NAME}/occ" encryption:enable
 fi
 
-# Set Nextcloud to run maintenace tasks as a cron job
+# Set Nextcloud to run maintenance tasks as a cron job
 sed -i '' "s|WWW_DIR|${WWW_DIR}|" "${PWD}/includes/www-crontab"
 sed -i '' "s|HOST_NAME|${HOST_NAME}|" "${PWD}/includes/www-crontab"
 sudo -u www php "${WWW_DIR}/${HOST_NAME}/occ" background:cron
